@@ -25,6 +25,14 @@ module.exports.parser = function(js) {
     var pass3 = /removeClass\([\'"](.*?)[\'"]/gi;
     var match;
     while (match = pass3.exec(js)) this.addClass(match[1]);
+
+    var pass8 = /hasClass\([\'"](.*?)[\'"]/gi;
+    var match;
+    while (match = pass3.exec(js)) this.addClass(match[1]);
+
+    var pass9 = /toggleClass\([\'"](.*?)[\'"]/gi;
+    var match;
+    while (match = pass9.exec(js)) this.addClass(match[1]);
     
     var pass6 = /attr\([\'"](id|class)[\'"], [\'"](.*?)[\'"]/gi;
     var match;
@@ -83,6 +91,22 @@ module.exports.writer = function(js) {
         js = js.replace(match[0], selector);
     }
     
+    var pass8 = /hasClass\([\'"](.*?)[\'"]/gi;
+    var match;
+    while (match = pass8.exec(js)) {
+        if (that.ignoreClasses.indexOf(match[1]) > -1) continue;
+        var selector = match[0].replace(match[1], that.map["class"][match[1]]);
+        js = js.replace(match[0], selector);
+    }
+    
+    var pass9 = /toggleClass\([\'"](.*?)[\'"]/gi;
+    var match;
+    while (match = pass9.exec(js)) {
+        if (that.ignoreClasses.indexOf(match[1]) > -1) continue;
+        var selector = match[0].replace(match[1], that.map["class"][match[1]]);
+        js = js.replace(match[0], selector);
+    }
+	
     var pass6 = /attr\([\'"](id|class)[\'"], [\'"](.*?)[\'"]/gi;
     var match;
     while (match = pass6.exec(js)) {
